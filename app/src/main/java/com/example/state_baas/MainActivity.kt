@@ -121,7 +121,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier
                         .fillMaxSize()
                         .safeDrawingPadding()
-                        .padding(horizontal = 16.dp, vertical = 16.dp), //added padding so the button and text are not touching the screen borders like always
+                        .padding(horizontal = 16.dp, vertical = 16.dp), //added padding so the button and text are not touching the screen borders like always, that last padding was added with the help of AI
                     color = MaterialTheme.colorScheme.background // keeps the theme's background color
 
                 ) {
