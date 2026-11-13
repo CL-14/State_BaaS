@@ -108,6 +108,8 @@ class MainActivity : ComponentActivity() {
     // onCreate runs when the Activity is created
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)      // let the parent class do its own setup first
+        runPreconditionDemos()      // runs the check()/require() demos; read results in Logcat
+        runCustomExceptionDemo()    // runs the custom exception demo
         setContent {                            // everything inside here is Compose UI
             MaterialTheme {                     // applies Material Design styling to children
             // currentUser is state, so this if/else re evaluates whenever it changes
