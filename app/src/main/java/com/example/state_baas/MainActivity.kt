@@ -32,6 +32,10 @@ import com.google.firebase.auth.AuthResult              // what a sign-in Task d
 import com.google.firebase.auth.FirebaseAuth            // entry point to Firebase Authentication
 import com.google.firebase.auth.FirebaseUser            // represents a signed-in user
 
+
+//better UI imports
+import androidx.compose.foundation.layout.safeDrawingPadding // padding that avoids system bars, cutouts and the keyboard
+import androidx.compose.material3.Surface                    // a themed background container
 class MainActivity : ComponentActivity() {
 
     // CLASS-LEVEL state (Counter A). Declared in the class, not inside a composable
@@ -111,30 +115,44 @@ class MainActivity : ComponentActivity() {
         runPreconditionDemos()      // runs the check()/require() demos; read results in Logcat
         runCustomExceptionDemo()    // runs the custom exception demo
         setContent {                            // everything inside here is Compose UI
-            MaterialTheme {                     // applies Material Design styling to children
-            // currentUser is state, so this if/else re evaluates whenever it changes
-                if (currentUser === null)
-                {
-                    //added the firebase auth screen since it needs to show up before the counter
+            MaterialTheme {                    // applies Material Design styling to children
 
-                    //Nobody signed in -> login screen. Events go up as lambdas
-                    AuthScreen(
-                        errorMessage = authError,
-                        onSignIn = { email: String, password: String -> signIn(email, password) },
-                        onRegister = { email: String, password: String -> register(email, password) }
-                    )
-                } else {
-                    Column {
-                        Text("Signed in as ${currentUser?.email}") // ?. = only read email if currentUser isn't null
-                        Button(onClick = { signOut() }) { Text("Sign out") }
-                        CounterScreen(
-                            plainCounter = plainCounter,     // state goes down as a parameter
-                            onPlainIncrement = { plainCounter++ }   // events come up as a lambda that modifies the class-level state
+                Surface(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .safeDrawingPadding()
+                        .padding(horizontal = 16.dp, vertical = 16.dp), //added padding so the button and text are not touching the screen borders like always
+                    color = MaterialTheme.colorScheme.background // keeps the theme's background color
+
+                ) {
+                    // currentUser is state, so this if/else re evaluates whenever it changes
+                    if (currentUser === null)
+                    {
+                        //added the firebase auth screen since it needs to show up before the counter
+
+                        //Nobody signed in -> login screen. Events go up as lambdas
+                        AuthScreen(
+                            errorMessage = authError,
+                            onSignIn = { email: String, password: String -> signIn(email, password) },
+                            onRegister = { email: String, password: String -> register(email, password) }
                         )
+                    } else {
+                        Column {
+                            Text("Signed in as ${currentUser?.email}") // ?. = only read email if currentUser isn't null
+                            Button(onClick = { signOut() }) { Text("Sign out") }
+                            CounterScreen(
+                                plainCounter = plainCounter,     // state goes down as a parameter
+                                onPlainIncrement = { plainCounter++ }   // events come up as a lambda that modifies the class-level state
+                            )
+                        }
                     }
                 }
 
             }
+
+
+
+
         }
     }
 }
